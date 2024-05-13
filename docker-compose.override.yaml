@@ -7,17 +7,24 @@ x-ustreamer-svc: &ustreamer-svc
 ## Add your personal config here
 services:
   klipper:
+    image: klipper:latest
+    restart: always
+    privileged: true
+    build:
+        context: docker/klipper
+        target: run
     devices:
-      - /dev/ttymxc3:/dev/ttymxc3
+      - /dev/ttyUSB0
+      - /dev/ttyUSB1
 
-  webcam:
-    <<: *ustreamer-svc
-    devices:
-      - /dev/video0:/dev/webcam
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.webcam.loadbalancer.server.port=8080"
-      - "traefik.http.routers.webcam.rule=PathPrefix(`/webcam`)"
-      - "traefik.http.routers.webcam.entrypoints=web"
-      - "traefik.http.middlewares.webcam.stripprefix.prefixes=/webcam"
-      - "traefik.http.routers.webcam.middlewares=webcam"
+  # webcam:
+  #   <<: *ustreamer-svc
+  #   devices:
+  #     - /dev/video0:/dev/webcam
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.services.webcam.loadbalancer.server.port=8080"
+  #     - "traefik.http.routers.webcam.rule=PathPrefix(`/webcam`)"
+  #     - "traefik.http.routers.webcam.entrypoints=web"
+  #     - "traefik.http.middlewares.webcam.stripprefix.prefixes=/webcam"
+  #     - "traefik.http.routers.webcam.middlewares=webcam"

@@ -1,6 +1,9 @@
 services:
   make:
-    image: mkuf/klipper:${TAG:-latest}-mcu
+    image: klipper:${TAG:-latest}-mcu
+    build:
+        context: docker/klipper
+        target: mcu
     tty: true
     privileged: true
     entrypoint: make

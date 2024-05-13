@@ -1,8 +1,8 @@
 ## Get Code and Build venv
 FROM python:2 as build
 
-ARG REPO=https://github.com/Klipper3d/klipper
-ARG VERSION=master
+ARG REPO=https://github.com/Desuuuu/klipper
+ARG VERSION=dgus-reloaded
 
 WORKDIR /opt
 
