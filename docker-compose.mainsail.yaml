@@ -9,9 +9,6 @@ services:
     privileged: true
     logging:
       driver: none
-    depends_on:
-      init:
-        condition: service_completed_successfully
     command: >
       -I printer_data/run/klipper.tty
       -a printer_data/run/klipper.sock
@@ -34,9 +31,6 @@ services:
     pid: host
     logging:
       driver: none
-    depends_on:
-      init:
-        condition: service_completed_successfully
       klipper:
         condition: service_started
     volumes:
