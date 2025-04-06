@@ -187,7 +187,7 @@ services:
     labels:
       org.prind.service: spoolman
       traefik.enable: true
-      traefik.http.services.octoprint.loadbalancer.server.port: 8000
+      traefik.http.services.octoprint.loadbalancer.server.port: 8100
       traefik.http.routers.octoprint.rule: PathPrefix(`/spoolman`)
       traefik.http.routers.octoprint.entrypoints: web
 
@@ -204,21 +204,21 @@ services:
     labels:
       org.prind.service: init
 
-  ## Loadbalancer/Proxy
-  traefik:
-    image: traefik:3.3
-    command:
-      - "--accesslog"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    ports:
-      - "80:80"
-    restart: unless-stopped
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    labels:
-      org.prind.service: traefik
+  # ## Loadbalancer/Proxy
+  # traefik:
+  #   image: traefik:3.3
+  #   command:
+  #     - "--accesslog"
+  #     - "--providers.docker=true"
+  #     - "--providers.docker.exposedbydefault=false"
+  #     - "--entrypoints.web.address=:80"
+  #   ports:
+  #     - "80:80"
+  #   restart: unless-stopped
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #   labels:
+  #     org.prind.service: traefik
 
 volumes:
   run:
