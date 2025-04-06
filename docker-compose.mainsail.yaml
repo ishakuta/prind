@@ -76,20 +76,6 @@ services:
       # - traefik.http.routers.mainsail.rule=Host(`3d.ok.lan`) && PathPrefix(`/`)
       # - traefik.http.routers.mainsail.entrypoints=http
 
-  ## Accompanying Services/Infra
-  ##
-
-  ## Config dir needs to be writable by uid/gid 1000
-  ## This container sets the right permissions and exits
-  init:
-    image: busybox:latest
-    command: chown -R 1000:1000 /prind/config
-    volumes:
-      - .:/prind
-    restart: none
-    # labels:
-      # - org.prind.service=init
-
 
 volumes:
   run:
