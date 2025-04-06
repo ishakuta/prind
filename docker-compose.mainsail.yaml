@@ -86,6 +86,7 @@ services:
     command: chown -R 1000:1000 /prind/config
     volumes:
       - .:/prind
+    restart: none
     # labels:
       # - org.prind.service=init
 
