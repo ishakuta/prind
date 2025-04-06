@@ -23,8 +23,18 @@ services:
       - run:/opt/printer_data/run
       - gcode:/opt/printer_data/gcodes
       - log:/opt/printer_data/logs
+    container_name: klipper
     labels:
-      org.prind.service: klipper
+      - traefik.enable=true
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.routers.klipper.entryPoints=http
+      - traefik.http.routers.klipper.middlewares=redirect-to-https
+      - "traefik.http.routers.klipper.rule=Host(`klipper.ok.lan`) && PathPrefix(`/`)"
+      - traefik.http.routers.klipper.entryPoints=https
+      - traefik.http.routers.klipper.middlewares=gzip
+      - traefik.http.routers.klipper.tls.certresolver=letsencrypt
+      - traefik.http.routers.klipper.tls=true
 
   ## WebApi
   ##
@@ -55,12 +65,22 @@ services:
       - klipperscreen
       - moonraker-telegram-bot
       - mobileraker_companion
+    container_name: moonraker
     labels:
-      org.prind.service: moonraker
-      traefik.enable: true
-      traefik.http.services.moonraker.loadbalancer.server.port: 7125
-      traefik.http.routers.moonraker.rule: PathRegexp(`^/(websocket|printer|api|access|machine|server)`)
-      traefik.http.routers.moonraker.entrypoints: web
+      # traefik.enable: true
+      - traefik.http.services.moonraker.loadbalancer.server.port=7125
+      # traefik.http.routers.moonraker.rule: PathRegexp(`^/(websocket|printer|api|access|machine|server)`)
+      # traefik.http.routers.moonraker.entrypoints: web
+      - traefik.enable=true
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.moonraker.entryPoints=http
+      - traefik.http.moonraker.middlewares=redirect-to-https
+      - "traefik.http.routers.moonraker.rule=Host(`moonraker.ok.lan`) && PathPrefix(`/`)"
+      - traefik.http.routers.moonraker.entryPoints=https
+      - traefik.http.routers.moonraker.middlewares=gzip
+      - traefik.http.routers.moonraker.tls.certresolver=letsencrypt
+      - traefik.http.routers.moonraker.tls=true
 
   ## Frontends
   ##
@@ -204,21 +224,6 @@ services:
     labels:
       org.prind.service: init
 
-  ## Loadbalancer/Proxy
-  traefik:
-    image: traefik:3.3
-    command:
-      - "--accesslog"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    ports:
-      - "80:80"
-    restart: unless-stopped
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    labels:
-      org.prind.service: traefik
 
 volumes:
   run:
