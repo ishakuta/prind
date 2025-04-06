@@ -59,8 +59,16 @@ services:
       org.prind.service: moonraker
       traefik.enable: true
       traefik.http.services.moonraker.loadbalancer.server.port: 7125
-      traefik.http.routers.moonraker.rule: PathRegexp(`^/(websocket|printer|api|access|machine|server)`)
-      traefik.http.routers.moonraker.entrypoints: web
+      # have to manage traefik myself because of
+      # - https://github.com/coollabsio/coolify/issues/5235
+      # - https://github.com/coollabsio/coolify/issues/5555
+      #traefik.http.routers.moonraker.rule: PathRegexp(`^/(websocket|printer|api|access|machine|server)`)
+      #traefik.http.routers.moonraker.entrypoints: web
+      traefik.http.routers.moonraker.rule: Host(`moonraker`) && PathPrefix(`/`)
+      traefik.http.routers.moonraker.entrypoints: http
+      # coolify.managed: true
+      # coolify.applicationId: 3
+      # coolify.type: application
 
   ## Frontends
   ##
@@ -93,7 +101,7 @@ services:
     labels:
       org.prind.service: fluidd
       traefik.enable: true
-      traefik.http.services.fluidd.loadbalancer.server.port: 80
+      # traefik.http.services.fluidd.loadbalancer.server.port: 80
       traefik.http.routers.fluidd.rule: PathPrefix(`/`)
       traefik.http.routers.fluidd.entrypoints: web
 
@@ -105,9 +113,11 @@ services:
     labels:
       org.prind.service: mainsail
       traefik.enable: true
-      traefik.http.services.mainsail.loadbalancer.server.port: 80
-      traefik.http.routers.mainsail.rule: PathPrefix(`/`)
-      traefik.http.routers.mainsail.entrypoints: web
+      # traefik.http.services.mainsail.loadbalancer.server.port: 80
+      # traefik.http.routers.mainsail.rule: PathPrefix(`/`)
+      # traefik.http.routers.mainsail.entrypoints: web
+      traefik.http.routers.mainsail.rule: Host(`3d.ok.lan`) && PathPrefix(`/`)
+      traefik.http.routers.mainsail.entrypoints: http
 
   ## additional Services
   ##
