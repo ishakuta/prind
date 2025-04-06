@@ -23,8 +23,8 @@ services:
       - run:/opt/printer_data/run
       - gcode:/opt/printer_data/gcodes
       - log:/opt/printer_data/logs
-    labels:
-      org.prind.service: klipper
+    # labels:
+    #  - org.prind.service=klipper
 
   ## WebApi
   ##
@@ -49,17 +49,17 @@ services:
       - log:/opt/printer_data/logs
       - moonraker-db:/opt/printer_data/database
       - ./config:/opt/printer_data/config
-    labels:
-      org.prind.service: moonraker
-      traefik.enable: true
-      traefik.http.services.moonraker.loadbalancer.server.port: 7125
+    # labels:
+      # - org.prind.service=moonraker
+      # - traefik.enable=true
+      # - traefik.http.services.moonraker.loadbalancer.server.port=7125
       # have to manage traefik myself because of
       # - https://github.com/coollabsio/coolify/issues/5235
       # - https://github.com/coollabsio/coolify/issues/5555
-      #traefik.http.routers.moonraker.rule: PathRegexp(`^/(websocket|printer|api|access|machine|server)`)
-      #traefik.http.routers.moonraker.entrypoints: web
-      traefik.http.routers.moonraker.rule: Host(`moonraker`) && PathPrefix(`/`)
-      traefik.http.routers.moonraker.entrypoints: http
+      #- traefik.http.routers.moonraker.rule: PathRegexp(`^/(websocket|printer|api|access|machine|server)`)
+      #- traefik.http.routers.moonraker.entrypoints: web
+      # - traefik.http.routers.moonraker.rule=Host(`moonraker`) && PathPrefix(`/`)
+      # - traefik.http.routers.moonraker.entrypoints=http
 
   ## Frontends
   ##
@@ -67,14 +67,14 @@ services:
   mainsail:
     image: ghcr.io/mainsail-crew/mainsail:edge
     restart: unless-stopped
-    labels:
-      org.prind.service: mainsail
-      traefik.enable: true
-      # traefik.http.services.mainsail.loadbalancer.server.port: 80
-      # traefik.http.routers.mainsail.rule: PathPrefix(`/`)
-      # traefik.http.routers.mainsail.entrypoints: web
-      traefik.http.routers.mainsail.rule: Host(`3d.ok.lan`) && PathPrefix(`/`)
-      traefik.http.routers.mainsail.entrypoints: http
+    # labels:
+      # - org.prind.service=mainsail
+      # - traefik.enable=true
+      # - traefik.http.services.mainsail.loadbalancer.server.port: 80
+      # - traefik.http.routers.mainsail.rule: PathPrefix(`/`)
+      # - traefik.http.routers.mainsail.entrypoints: web
+      # - traefik.http.routers.mainsail.rule=Host(`3d.ok.lan`) && PathPrefix(`/`)
+      # - traefik.http.routers.mainsail.entrypoints=http
 
   ## Accompanying Services/Infra
   ##
@@ -86,8 +86,8 @@ services:
     command: chown -R 1000:1000 /prind/config
     volumes:
       - .:/prind
-    labels:
-      org.prind.service: init
+    # labels:
+      # - org.prind.service=init
 
 
 volumes:
